@@ -21,43 +21,15 @@ intervention.
 --- 
 
 ## System Architecture
-┌─────────────────────────────────────────┐
-│           Tkinter GUI Layer             │
-│  (Test selection, DUT config, Live log) │
-└────────────────┬────────────────────────┘
-│
-┌───────────▼────────────┐
-│   Test Orchestrator    │
-│  (Multithreaded — 3    │
-│   routines in parallel)│
-└──┬──────────┬──────────┘
-│          │
-┌───────▼──┐  ┌────▼────────────┐
-│VISA/SCPI │  │  UDP DUT Control│
-│ Layer    │  │  Interface      │
-│(PyVISA + │  └─────────────────┘
-│RsInstrmt)│
-└───┬──────┘
-│
-┌───▼──────────────────────────┐
-│   RF Switch Matrix Router    │
-│ (routes signal paths per     │
-│  test routine)               │
-└───┬──────────────────────────┘
-│
-┌───▼──────────────────────────┐
-│   RF Instruments             │
-│ (Spectrum Analyser, Signal   │
-│  Generator, Power Meter)     │
-└──────────────────────────────┘
-│
-┌───────▼──────────────────────┐
-│  Report Generator            │
-│  SQLite logging + ReportLab  │
-│  → Structured CSV + PDF      │
-└──────────────────────────────┘
-
----
+```mermaid
+graph TD
+    A[Tkinter GUI] --> B[Test Orchestrator - Multithreaded]
+    B --> C[VISA/SCPI Layer - PyVISA + RsInstrument]
+    B --> D[UDP DUT Control]
+    C --> E[RF Switch Matrix Router]
+    E --> F[RF Instruments]
+    F --> G[Report Generator - SQLite + CSV + PDF]
+```
 
 ## What It Does
 
